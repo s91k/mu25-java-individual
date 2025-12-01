@@ -6,7 +6,7 @@ public class Board {
     }
 
     public boolean placeMark(char mark, int x, int y){
-        if(x >= 0 && x <= board.length && y >= 0 && y < board.length && board[y][x] == 0){
+        if(board[y][x] == 0){
             board[y][x] = mark;
             return true;
         } else {
