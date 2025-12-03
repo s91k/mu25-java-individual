@@ -6,10 +6,10 @@ public class App {
 
         Scanner s  = new Scanner(System.in);
         System.out.print("Ange namn på spelare 1: ");
-        players[0] = new Player('x', s.nextLine().trim());
+        players[0] = new Player('X', s.nextLine().trim());
 
         System.out.print("Ange namn på spelare 2: ");
-        players[1] = new Player('o', s.nextLine().trim());
+        players[1] = new Player('◯', s.nextLine().trim());
 
         boolean continuePlaying = true;
 

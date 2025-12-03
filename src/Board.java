@@ -1,4 +1,7 @@
 public class Board {
+    private static final String ANSI_GRAY = "\u001B[90m";
+    private static final String ANSI_RESET = "\u001B[0m";
+
     private final char[][] board;
 
     public Board(int size){
@@ -76,18 +79,26 @@ public class Board {
     public String toString(){
         StringBuilder s = new StringBuilder();
 
+        s.append("┌").append("╴╴╴┬".repeat(board.length - 1)).append("╴╴╴┐\n");
+
         for(int y = 0; y < board.length; y++){
-            for(int x = 0; x < board[y].length - 1; x++){
-                s.append(' ').append((board[y][x] == 0 ? ' ' : board[y][x])).append(" |");
+            s.append('╎');
+
+            for(int x = 0; x < board[y].length; x++){
+                s.append(' ').append(tileToString(x, y)).append(" ╎");
             }
 
-            s.append(' ').append(board[y][board[y].length - 1] == 0 ? ' ' : board[y][board[y].length - 1]);
-
             if(y < board.length - 1){
-                s.append("\n---").append("+---".repeat(Math.max(0, board[y].length - 1))).append('\n');
+                s.append("\n├╴╴╴").append("┼╴╴╴".repeat(Math.max(0, board[y].length - 1))).append("┤\n");
             }
         }
 
+        s.append("\n└").append("╴╴╴┴".repeat(board.length - 1)).append("╴╴╴┘\n");
+
         return s.toString();
+    }
+
+    private String tileToString(int x, int y){
+        return (board[y][x] == 0 ? (ANSI_GRAY + (y * 3 + x + 1) + ANSI_RESET) : String.valueOf(board[y][x]));
     }
 }
