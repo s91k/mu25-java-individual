@@ -2,13 +2,18 @@ public class App {
     public static void main(String[] args){
         Player[] players = new Player[2];
 
-        int nrOfPlayers = InputUtils.showMenu("Välj antal spelare:\n1. En spelare\n2. Två spelare", new int[] {1, 2}, "Ogiltigt alternativ, giltiga alternativ: 1 och 2.");
+        int nrOfPlayers = InputUtils.nextOption("Välj antal spelare:\n1. En spelare\n2. Två spelare", new int[] {1, 2}, "Ogiltigt alternativ, giltiga alternativ: 1 och 2.");
 
-        System.out.print("Ange namn på spelare 1: ");
+        System.out.print("Ange namn på spelare 1 (X): ");
         players[0] = new HumanPlayer('X', InputUtils.nextLine().trim());
 
-        System.out.print("Ange namn på spelare 2: ");
-        players[1] = nrOfPlayers == 1 ? new ComputerPlayer('◯', InputUtils.nextLine().trim()) : new HumanPlayer('◯', InputUtils.nextLine().trim());
+        if(nrOfPlayers == 1){
+            players[1] = new ComputerPlayer('◯', InputUtils.nextOption("Ange svårighetsgrad på spelare 2 (1-3): ", new int[] { 1, 2, 3}, null));
+            System.out.println("Din motståndare kommer vara " + players[1]);
+        } else {
+            System.out.print("Ange namn på spelare 2 (◯): ");
+            players[1] = new HumanPlayer('◯', InputUtils.nextLine().trim());
+        }
 
         boolean continuePlaying = true;
 
@@ -47,7 +52,7 @@ public class App {
 
             System.out.println(players[0].getDescription() + " och " + players[1].getDescription());
 
-            continuePlaying = InputUtils.showMenu("Vill ni spela igen? (y/n)", new String[]{"y", "n"}, null).equals("y");
+            continuePlaying = InputUtils.nextOption("Vill ni spela igen? (y/n)", new String[]{"y", "n"}, null).equals("y");
         }
     }
 }

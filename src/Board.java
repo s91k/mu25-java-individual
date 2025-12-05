@@ -22,6 +22,10 @@ public class Board {
         }
     }
 
+    public void removeMark(int tile){
+        board[(tile - 1) / 3][(tile - 1) % 3] = 0;
+    }
+
     public boolean hasEmptySpots(){
         for (char[] chars : board) {
             for (char aChar : chars) {

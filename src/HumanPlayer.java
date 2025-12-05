@@ -7,7 +7,7 @@ public class HumanPlayer extends Player{
 
     @Override
     public int getNextMove(Board b) {
-        return InputUtils.showMenu(this + ", vilken ruta?",
+        return InputUtils.nextOption(this + ", vilken ruta?",
                 b.getValidMoves(), "Ogiltigt drag, giltiga drag: " + Arrays.toString(b.getValidMoves()) + "\n" + b);
     }
 }

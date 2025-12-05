@@ -7,7 +7,8 @@ public class InputUtils {
         return scanner.nextLine();
     }
 
-    public static String showMenu(String instruction, String[] validOptions, String error){
+    public static String nextOption(String instruction, String[] validOptions, String error){
+        // Keep looping until the user provides a valid response
         while(true){
             System.out.println(instruction);
 
@@ -25,13 +26,13 @@ public class InputUtils {
         }
     }
 
-    public static int showMenu(String instruction, int[] validOptions, String error){
+    public static int nextOption(String instruction, int[] validOptions, String error){
         String[] validMovesStr = new String[validOptions.length];
 
         for(int i = 0; i < validOptions.length; i++){
             validMovesStr[i] = String.valueOf(validOptions[i]);
         }
 
-        return Integer.parseInt(showMenu(instruction, validMovesStr, error));
+        return Integer.parseInt(nextOption(instruction, validMovesStr, error));
     }
 }
