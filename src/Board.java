@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Board {
     private static final String ANSI_GRAY = "\u001B[90m";
     private static final String ANSI_RESET = "\u001B[0m";
@@ -8,9 +11,11 @@ public class Board {
         board = new char[size][size];
     }
 
-    public boolean placeMark(char mark, int x, int y){
-        if(board[y][x] == 0){
-            board[y][x] = mark;
+    public boolean placeMark(char mark, int tile){
+        tile--;
+
+        if(board[tile / 3][tile % 3] == 0){
+            board[tile / 3][tile % 3] = mark;
             return true;
         } else {
             return false;
@@ -27,6 +32,30 @@ public class Board {
         }
 
         return false;
+    }
+
+    public char[][] getBoard(){
+        return board;
+    }
+
+    public int[] getValidMoves(){
+        List<Integer> list = new ArrayList<>();
+
+        for(int y = 0; y < board.length; y++) {
+            for (int x = 0; x < board[y].length; x++) {
+                if(board[y][x] == 0){
+                    list.add(y * 3 + x + 1);
+                }
+            }
+        }
+
+        int[] arr = new int[list.size()];
+
+        for(int i = 0; i < arr.length; i++){
+            arr[i] = list.get(i);
+        }
+
+        return arr;
     }
 
     public boolean isWinner(char mark){
@@ -93,7 +122,7 @@ public class Board {
             }
         }
 
-        s.append("\n└").append("╴╴╴┴".repeat(board.length - 1)).append("╴╴╴┘\n");
+        s.append("\n└").append("╴╴╴┴".repeat(board.length - 1)).append("╴╴╴┘");
 
         return s.toString();
     }

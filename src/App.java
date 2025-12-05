@@ -1,40 +1,44 @@
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class App {
     public static void main(String[] args){
+        Scanner s  = new Scanner(System.in);
+
+        int nrOfPlayers = showMenu(s, "Välj antal spelare:\n1. En spelare\n2. Två spelare", new int[] {1, 2}, "Ogiltigt alternativ, giltiga alternativ: 1 och 2.");
+
         Player[] players = new Player[2];
 
-        Scanner s  = new Scanner(System.in);
         System.out.print("Ange namn på spelare 1: ");
-        players[0] = new Player('X', s.nextLine().trim());
+        players[0] = new HumanPlayer('X', s.nextLine().trim());
 
         System.out.print("Ange namn på spelare 2: ");
-        players[1] = new Player('◯', s.nextLine().trim());
+        players[1] = nrOfPlayers == 1 ? new ComputerPlayer('◯', s.nextLine().trim()) : new HumanPlayer('◯', s.nextLine().trim());
+
 
         boolean continuePlaying = true;
 
         while(continuePlaying){
             Board b = new Board(3);
-            int currentPlayer = 0;
+            int currentPlayer = Math.random() > 0.5 ? 1 : 0;
 
             while(true){
-                boolean markPlaced = false;
+                System.out.println(b);
 
-                // Loop until the player makes a valid move
-                while(!markPlaced){
-                    System.out.println(b);
-                    System.out.println(players[currentPlayer].getName() + " (" + players[currentPlayer].getMark() + "), vilken ruta (1-9)?");
+                int tile;
 
-                    try {
-                        int nextMove = Integer.parseUnsignedInt(s.nextLine()) - 1;
-                        markPlaced = b.placeMark(players[currentPlayer].getMark(), nextMove % 3, nextMove / 3);
+                if(players[currentPlayer] instanceof HumanPlayer){
+                    tile = showMenu(s, players[currentPlayer].getName() + " (" + players[currentPlayer].getMark() + "), vilken ruta?",
+                            b.getValidMoves(), "Ogiltigt drag, giltiga drag: " + Arrays.toString(b.getValidMoves()) + "\n" + b);
+                } else {
+                    tile = ((ComputerPlayer)players[currentPlayer]).getNextMove(b);
+                    System.out.println(players[currentPlayer].getName() + " (" + players[currentPlayer].getMark() + ") väljer ruta " + tile);
+                }
 
-                        if(!markPlaced){
-                            System.out.println("Ogiltigt drag, rutan måste vara tom.");
-                        }
-                    } catch(NumberFormatException | IndexOutOfBoundsException _) {
-                        System.out.println("Ogiltigt drag, ange en siffra mellan 1 och 9");
-                    }
+                if(!b.placeMark(players[currentPlayer].getMark(), tile)){
+                    System.out.println("Error, ogiltigt drag");
+                    return;
                 }
 
                 if(b.isWinner(players[currentPlayer].getMark())){
@@ -54,20 +58,35 @@ public class App {
 
             System.out.println(players[0] + " och " + players[1]);
 
-            // Loop until valid response is given
-            while(true){
-                System.out.println("Vill ni spela igen? (y/n)");
-                String line = s.nextLine();
+            continuePlaying = showMenu(s, "Vill ni spela igen? (y/n)", new String[]{"y", "n"}, null).equals("y");
+        }
+    }
 
-                if(line.equals("y")){
-                    break;
-                } else if(line.equals("n")){
-                    continuePlaying = false;
-                    break;
+    public static String showMenu(Scanner s, String instruction, String[] validOptions, String error){
+        while(true){
+            System.out.println(instruction);
+
+            String option = s.nextLine();
+
+            for(String validOption : validOptions){
+                if(validOption.equals(option)){
+                    return option;
                 }
             }
+
+            if(error != null){
+                System.out.println(error);
+            }
+        }
+    }
+
+    public static int showMenu(Scanner s, String instruction, int[] validOptions, String error){
+        String[] validMovesStr = new String[validOptions.length];
+
+        for(int i = 0; i < validOptions.length; i++){
+            validMovesStr[i] = String.valueOf(validOptions[i]);
         }
 
-
+        return Integer.parseInt(showMenu(s, instruction, validMovesStr, error));
     }
 }

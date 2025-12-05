@@ -1,4 +1,4 @@
-public class Player {
+public abstract class Player {
     private final char mark;
     private final String name;
     private int nrOfWins;
