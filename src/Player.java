@@ -13,10 +13,6 @@ public abstract class Player {
         return mark;
     }
 
-    public String getName(){
-        return name;
-    }
-
     public int getNrOfWins(){
         return nrOfWins;
     }
@@ -26,6 +22,12 @@ public abstract class Player {
     }
 
     public String toString(){
+        return name + " (" + mark + ")";
+    }
+
+    public String getDescription(){
         return name + " (" + mark + ") har vunnit " + nrOfWins + " " + (nrOfWins == 1 ? "gång" : "gånger");
     }
+
+    public abstract int getNextMove(Board b);
 }

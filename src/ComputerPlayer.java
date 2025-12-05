@@ -3,6 +3,7 @@ public class ComputerPlayer extends Player{
         super(mark, name);
     }
 
+    @Override
     public int getNextMove(Board b){
         var board = b.getBoard().clone();
         var scoreBoard = new int[board.length][board.length];
